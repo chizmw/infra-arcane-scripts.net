@@ -134,7 +134,11 @@ resource "aws_api_gateway_gateway_response" "json2pdf_gateway_response_for" {
   }
   response_templates = {
     "application/json" = jsonencode(
-      { "error" : each.value, "chisel" : "was here", "version" : data.external.commit_version.result.version }
+      {
+        "error" : each.value,
+        "chisel" : "was here",
+        "version" : "${data.external.useful_version_info.result.project_dir}:${data.external.useful_version_info.result.commit_version}"
+      }
     )
   }
   depends_on = [aws_api_gateway_rest_api.json2pdf_api]
