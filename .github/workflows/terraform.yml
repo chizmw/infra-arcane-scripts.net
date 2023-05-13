@@ -54,3 +54,6 @@ jobs:
           aws-deployment-role: ${{ matrix.aws-deployment-role }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           # yamllint enable rule:line-length
+
+          # set auto-apply to true if we are running because of a tag creation
+          auto-apply: ${{ startsWith(github.ref, 'refs/tags/') }}
