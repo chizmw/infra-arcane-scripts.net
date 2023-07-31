@@ -6,10 +6,6 @@ data "archive_file" "lambda_code" {
   output_path = "./tmp/apigwauth.zip"
 }
 
-data "aws_iam_role" "iam_for_lambda" {
-  name = "deploy_json2pdf"
-}
-
 resource "aws_lambda_function" "lambda_apigw_auth" {
   # checkov:skip=CKV_AWS_115: ADD REASON
   # checkov:skip=CKV_AWS_116: ADD REASON

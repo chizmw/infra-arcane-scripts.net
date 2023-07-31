@@ -47,10 +47,6 @@ data "archive_file" "lambda_code" {
   output_path = "./tmp/invalidatecache.zip"
 }
 
-data "aws_iam_role" "iam_for_lambda" {
-  name = "deploy_json2pdf"
-}
-
 resource "aws_lambda_function" "lambda_invalidate_cache" {
   # checkov:skip=CKV_AWS_116: ADD REASON
   # checkov:skip=CKV_AWS_117: ADD REASON
