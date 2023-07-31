@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "infra-arcane-scripts-net"
+version = "0.0.2"
+description = ""
+authors = ["Chisel <chisel@malik-wright.uk>"]
+license = "GPL-3.0-or-later"
+readme = "README.md"
+packages = [{include = "infra_arcane_scripts"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
