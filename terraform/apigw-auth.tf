@@ -21,3 +21,13 @@ resource "aws_lambda_function" "lambda_apigw_auth" {
   reserved_concurrent_executions = 10
 
 }
+
+# add an API Gateway authorizer
+resource "aws_api_gateway_authorizer" "json2pdf_authorizer" {
+  name                   = "json2pdf-authorizer"
+  rest_api_id            = aws_api_gateway_rest_api.json2pdf_api.id
+  authorizer_uri         = aws_lambda_function.lambda_apigw_auth.invoke_arn
+  authorizer_credentials = data.aws_iam_role.iam_for_lambda.arn
+  identity_source        = "method.request.header.x-api-key"
+  type                   = "REQUEST"
+}
