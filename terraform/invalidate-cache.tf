@@ -57,4 +57,5 @@ resource "aws_lambda_function" "lambda_invalidate_cache" {
   role             = data.aws_iam_role.iam_for_lambda.arn
   handler          = "invalidate_cache.lambda_handler"
   runtime          = "python3.10"
+  tags             = local.tag_defaults
 }
