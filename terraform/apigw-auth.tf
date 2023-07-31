@@ -17,4 +17,5 @@ resource "aws_lambda_function" "lambda_apigw_auth" {
   role             = data.aws_iam_role.iam_for_lambda.arn
   handler          = "apigw_auth.lambda_handler"
   runtime          = "python3.10"
+  tags             = local.tag_defaults
 }
