@@ -2,7 +2,11 @@ resource "aws_api_gateway_rest_api" "json2pdf_api" {
   provider    = aws.default
   name        = local.pdf_api_name
   description = local.pdf_api_description
+  lifecycle {
+    create_before_destroy = true
+  }
 }
+
 
 resource "aws_api_gateway_resource" "json2pdf_resource" {
   provider    = aws.default

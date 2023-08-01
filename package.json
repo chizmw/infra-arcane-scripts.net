@@ -1,0 +1,13 @@
+{
+  "name": "infra-arcane-scripts.net",
+  "version": "0.0.2",
+  "description": "Core/shared AWS infrastructure, terraform managed",
+  "main": "index.js",
+  "repository": "git@github.com:chizmw/infra-arcane-scripts.net.git",
+  "author": "Chisel <chisel@malik-wright.uk>",
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "@changesets/cli": "^2.26.2",
+    "@svitejs/changesets-changelog-github-compact": "^1.1.0"
+  }
+}
