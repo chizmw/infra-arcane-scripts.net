@@ -296,3 +296,4 @@ tags
 .infracost/
 tmp/
 .terraform.lock.hcl
+tfplan
