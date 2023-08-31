@@ -20,8 +20,8 @@ resource "aws_dynamodb_table" "pdf_api_auth_dynamodb_table" {
     enabled = false
   }
 
-  ttl {
-    attribute_name = "TimeToExist"
-    enabled        = false
-  }
+  #ttl {
+  #attribute_name = "TimeToExist"
+  #enabled        = false
+  #}
 }
