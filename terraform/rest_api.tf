@@ -1,8 +1,3 @@
-module "lambda_function" {
-  source               = "./modules/lambda_function"
-  s3_bucket_name       = "${local.account_id}-${local.aws_default_region}-lambda-${local.old_pdf_api_name}"
-  lambda_function_name = "${local.pdf_api_base_name}-DEMO-lambda"
-}
 
 module "core_lambda_function" {
   source               = "./modules/lambda_function-python"
