@@ -4,6 +4,24 @@ resource "aws_api_gateway_rest_api" "json2pdf_api" {
   description = local.pdf_api_description
 }
 
+resource "aws_api_gateway_resource" "json2pdf_resource" {
+  provider    = aws.default
+  path_part   = "old-render"
+  parent_id   = aws_api_gateway_rest_api.json2pdf_api.root_resource_id
+  rest_api_id = aws_api_gateway_rest_api.json2pdf_api.id
+}
+
+
+# OPTIONS method
+resource "aws_api_gateway_method" "root_options_method" {
+  provider      = aws.default
+  rest_api_id   = aws_api_gateway_rest_api.json2pdf_api.id
+  resource_id   = aws_api_gateway_resource.json2pdf_resource.id
+  http_method   = "OPTIONS"
+  authorization = "NONE"
+}
+
+
 
 # we need a gateway reaponse for default 4xx responses that add the following
 # header

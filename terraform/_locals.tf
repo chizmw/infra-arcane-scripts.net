@@ -25,4 +25,7 @@ locals {
     Product = "botc-custom-script-json2pdf"
     InfoURL = "https://github.com/chizmw/botc-custom-script-json2pdf"
   }
+
+  account_id         = "436158765452"
+  aws_default_region = "eu-west-2"
 }
