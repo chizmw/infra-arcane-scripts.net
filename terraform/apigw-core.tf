@@ -1,12 +1,12 @@
 resource "aws_api_gateway_rest_api" "json2pdf_api" {
   provider    = aws.default
-  name        = local.pdf_api_name
-  description = local.pdf_api_description
+  name        = local.old_pdf_api_name
+  description = local.old_pdf_api_description
 }
 
 resource "aws_api_gateway_resource" "json2pdf_resource" {
   provider    = aws.default
-  path_part   = "old-render"
+  path_part   = "render"
   parent_id   = aws_api_gateway_rest_api.json2pdf_api.root_resource_id
   rest_api_id = aws_api_gateway_rest_api.json2pdf_api.id
 }

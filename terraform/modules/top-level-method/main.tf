@@ -3,6 +3,10 @@ provider "aws" {
   alias  = "default"
 }
 
+variable "api_version" {
+  type = string
+}
+
 variable "method_path" {
   type = string
 }
@@ -23,7 +27,7 @@ locals {
 
 resource "aws_api_gateway_resource" "path_resource" {
   provider    = aws.default
-  path_part   = var.method_path
+  path_part   = "${var.api_version}/${var.method_path}"
   parent_id   = var.parent_id
   rest_api_id = var.rest_api_id
 }

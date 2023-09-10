@@ -1,7 +1,8 @@
 # https://hands-on.cloud/terraform-api-gateway/
 
 resource "aws_api_gateway_rest_api" "rest_api" {
-  name = var.rest_api_name
+  name        = var.rest_api_name
+  description = var.rest_api_description
 }
 
 

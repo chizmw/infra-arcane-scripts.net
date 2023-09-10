@@ -1,7 +1,12 @@
 locals {
+  old_pdf_api_name        = "pdf-api"
+  old_pdf_api_description = "JSON-to-PDF API for custom BotC scripts"
 
-  pdf_api_name        = "pdf-api"
+  pdf_api_base_name   = "arcane-scripts-api"
   pdf_api_description = "JSON-to-PDF API for custom BotC scripts"
+
+  # let's version the api
+  pdf_api_version = "v1"
 
   render_method_path = "render"
   script_method_path = "script"
