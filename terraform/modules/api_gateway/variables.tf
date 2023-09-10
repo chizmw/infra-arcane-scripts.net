@@ -28,3 +28,8 @@ variable "rest_api_stage_name" {
   description = "The name of the API Gateway stage"
   default     = "prod" //add a stage name as per your requirement
 }
+
+variable "current_version" {
+  type        = string
+  description = "The current version of the API"
+}

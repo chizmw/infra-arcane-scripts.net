@@ -14,6 +14,7 @@ module "api_gateway" {
   api_gateway_account_id = local.account_id
   lambda_function_name   = module.core_lambda_function.lambda_function_name
   lambda_function_arn    = module.core_lambda_function.lambda_function_arn
+  current_version        = "${data.external.useful_version_info.result.project_dir}:${data.external.useful_version_info.result.commit_version}"
   depends_on = [
     module.core_lambda_function
   ]
