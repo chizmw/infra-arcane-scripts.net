@@ -19,10 +19,25 @@ resource "aws_api_gateway_method" "rest_api_get_method" {
   authorization = "NONE"
 }
 
-resource "aws_api_gateway_integration" "rest_api_get_method_integration" {
+resource "aws_api_gateway_method" "rest_api_post_method" {
+  rest_api_id   = aws_api_gateway_rest_api.rest_api.id
+  resource_id   = aws_api_gateway_resource.rest_api_resource.id
+  http_method   = "POST"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "rest_api_get_method_integration_GET" {
   rest_api_id             = aws_api_gateway_rest_api.rest_api.id
   resource_id             = aws_api_gateway_resource.rest_api_resource.id
   http_method             = aws_api_gateway_method.rest_api_get_method.http_method
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = var.lambda_function_arn
+}
+resource "aws_api_gateway_integration" "rest_api_get_method_integration_POST" {
+  rest_api_id             = aws_api_gateway_rest_api.rest_api.id
+  resource_id             = aws_api_gateway_resource.rest_api_resource.id
+  http_method             = aws_api_gateway_method.rest_api_post_method.http_method
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = var.lambda_function_arn
@@ -55,11 +70,24 @@ resource "aws_api_gateway_deployment" "rest_api_deployment" {
   rest_api_id = aws_api_gateway_rest_api.rest_api.id
   triggers = {
     redeployment = sha1(jsonencode([
-      aws_api_gateway_resource.rest_api_resource.id,
+      #aws_api_gateway_gateway_response.gateway_response.id,
+      aws_api_gateway_integration.rest_api_get_method_integration_GET.id,
+      aws_api_gateway_integration.rest_api_get_method_integration_POST.id,
       aws_api_gateway_method.rest_api_get_method.id,
-      aws_api_gateway_integration.rest_api_get_method_integration.id
+      aws_api_gateway_method.rest_api_post_method.id,
+      #aws_api_gateway_method_response.rest_api_get_method_response_200.id,
+      aws_api_gateway_resource.rest_api_resource.id,
+      aws_lambda_permission.api_gateway_lambda.id,
     ]))
   }
+  depends_on = [
+    aws_api_gateway_integration.rest_api_get_method_integration_GET,
+    aws_api_gateway_integration.rest_api_get_method_integration_POST,
+    aws_api_gateway_method.rest_api_get_method,
+    aws_api_gateway_method.rest_api_post_method,
+    aws_api_gateway_method.root_options_method,
+    #aws_api_gateway_method_response.rest_api_get_method_response_200,
+  ]
 }
 resource "aws_api_gateway_stage" "rest_api_stage" {
   deployment_id = aws_api_gateway_deployment.rest_api_deployment.id

@@ -19,3 +19,14 @@ module "api_gateway" {
     module.core_lambda_function
   ]
 }
+
+# always create a deployment in stage "alpha" fpr the API Gateway
+resource "aws_api_gateway_deployment" "rest_api_deployment" {
+  rest_api_id = module.api_gateway.rest_api_id
+  stage_name  = "alpha"
+  triggers = {
+    redeployment = sha1(jsonencode([
+      module.api_gateway.redeployment_triggers,
+    ]))
+  }
+}
