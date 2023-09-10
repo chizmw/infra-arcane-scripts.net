@@ -297,3 +297,5 @@ tags
 tmp/
 .terraform.lock.hcl
 tfplan
+/terraform/*.zip
+/terraform/**/*.zip
