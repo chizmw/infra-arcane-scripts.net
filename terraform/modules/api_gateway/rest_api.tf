@@ -6,59 +6,6 @@ resource "aws_api_gateway_rest_api" "rest_api" {
 }
 
 
-resource "aws_api_gateway_resource" "rest_api_resource" {
-  rest_api_id = aws_api_gateway_rest_api.rest_api.id
-  parent_id   = aws_api_gateway_rest_api.rest_api.root_resource_id
-  path_part   = "scripts"
-}
-
-# resource "aws_api_gateway_method" "rest_api_GET_method" {
-#   rest_api_id   = aws_api_gateway_rest_api.rest_api.id
-#   resource_id   = aws_api_gateway_resource.rest_api_resource.id
-#   http_method   = "GET"
-#   authorization = "NONE"
-# }
-
-resource "aws_api_gateway_method" "rest_api_POST_method" {
-  rest_api_id   = aws_api_gateway_rest_api.rest_api.id
-  resource_id   = aws_api_gateway_resource.rest_api_resource.id
-  http_method   = "POST"
-  authorization = "NONE"
-}
-
-# resource "aws_api_gateway_integration" "rest_api_GET_method_integration" {
-#   rest_api_id             = aws_api_gateway_rest_api.rest_api.id
-#   resource_id             = aws_api_gateway_resource.rest_api_resource.id
-#   http_method             = aws_api_gateway_method.rest_api_GET_method.http_method
-#   integration_http_method = "GET"
-#   type                    = "AWS_PROXY"
-#   uri                     = var.lambda_function_arn
-# }
-resource "aws_api_gateway_integration" "rest_api_POST_method_integration" {
-  rest_api_id             = aws_api_gateway_rest_api.rest_api.id
-  resource_id             = aws_api_gateway_resource.rest_api_resource.id
-  http_method             = aws_api_gateway_method.rest_api_POST_method.http_method
-  integration_http_method = "POST"
-  type                    = "AWS_PROXY"
-  uri                     = var.lambda_function_arn
-}
-
-resource "aws_api_gateway_method_response" "rest_api_get_method_response_200" {
-  rest_api_id = aws_api_gateway_rest_api.rest_api.id
-  resource_id = aws_api_gateway_resource.rest_api_resource.id
-  http_method = aws_api_gateway_method.rest_api_POST_method.http_method
-  status_code = "200"
-}
-
-//  Creating a lambda resource based policy to allow API gateway to invoke the lambda function:
-resource "aws_lambda_permission" "api_gateway_lambda_POST" {
-  statement_id  = "AllowExecutionFromAPIGateway"
-  action        = "lambda:InvokeFunction"
-  function_name = var.lambda_function_name
-  principal     = "apigateway.amazonaws.com"
-  source_arn    = "arn:aws:execute-api:${var.api_gateway_region}:${var.api_gateway_account_id}:${aws_api_gateway_rest_api.rest_api.id}/*/${aws_api_gateway_method.rest_api_POST_method.http_method}${aws_api_gateway_resource.rest_api_resource.path}"
-
-}
 
 resource "aws_api_gateway_deployment" "rest_api_deployment" {
   rest_api_id       = aws_api_gateway_rest_api.rest_api.id
@@ -66,23 +13,13 @@ resource "aws_api_gateway_deployment" "rest_api_deployment" {
   stage_description = var.current_version
   triggers = {
     redeployment = sha1(jsonencode([
-      #aws_api_gateway_gateway_response.gateway_response.id,
-      #aws_api_gateway_integration.rest_api_GET_method_integration.id,
-      aws_api_gateway_integration.rest_api_POST_method_integration.id,
-      #aws_api_gateway_method.rest_api_GET_method.id,
-      aws_api_gateway_method.rest_api_POST_method.id,
-      #aws_api_gateway_method_response.rest_api_get_method_response_200.id,
-      aws_api_gateway_resource.rest_api_resource.id,
-      #aws_lambda_permission.api_gateway_lambda_GET.id,
+      aws_api_gateway_method.rest_api_POST_method_slash-scripts.id,
+      aws_api_gateway_integration.rest_api_GET_method_integration.id,
     ]))
   }
   depends_on = [
-    #aws_api_gateway_integration.rest_api_GET_method_integration,
-    aws_api_gateway_integration.rest_api_POST_method_integration,
-    #aws_api_gateway_method.rest_api_GET_method,
-    aws_api_gateway_method.rest_api_POST_method,
-    #aws_api_gateway_method.root_options_method,
-    #aws_api_gateway_method_response.rest_api_get_method_response_200,
+    aws_api_gateway_method.rest_api_POST_method_slash-scripts,
+    aws_api_gateway_integration.rest_api_GET_method_integration,
   ]
 }
 resource "aws_api_gateway_stage" "rest_api_stage" {

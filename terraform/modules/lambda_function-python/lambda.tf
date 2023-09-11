@@ -22,17 +22,30 @@ resource "aws_s3_object" "lambda_code" {
   etag   = filemd5(data.archive_file.lambda_code.output_path)
 }
 
-resource "aws_lambda_function" "get__scripts" {
-  function_name    = var.lambda_function_name
+resource "aws_lambda_function" "slash_scripts" {
+  function_name    = "${var.lambda_function_name}-slash_scripts"
   s3_bucket        = aws_s3_bucket.lambda_bucket.id
   s3_key           = aws_s3_object.lambda_code.key
   runtime          = var.lambda_runtime
-  handler          = "lambda.get__scripts"
+  handler          = "lambda.slash_scripts"
   source_code_hash = data.archive_file.lambda_code.output_base64sha256
   role             = aws_iam_role.lambda_execution_role.arn
 }
-resource "aws_cloudwatch_log_group" "lambda_log_group" {
-  name              = "/aws/lambda/${aws_lambda_function.get__scripts.function_name}"
+resource "aws_lambda_function" "slash_status" {
+  function_name    = "${var.lambda_function_name}-slash_status"
+  s3_bucket        = aws_s3_bucket.lambda_bucket.id
+  s3_key           = aws_s3_object.lambda_code.key
+  runtime          = var.lambda_runtime
+  handler          = "lambda.slash_status"
+  source_code_hash = data.archive_file.lambda_code.output_base64sha256
+  role             = aws_iam_role.lambda_execution_role.arn
+}
+resource "aws_cloudwatch_log_group" "lambda_log_group-slash_scripts" {
+  name              = "/aws/lambda/${aws_lambda_function.slash_scripts.function_name}"
+  retention_in_days = 7
+}
+resource "aws_cloudwatch_log_group" "lambda_log_group-slash_status" {
+  name              = "/aws/lambda/${aws_lambda_function.slash_status.function_name}"
   retention_in_days = 7
 }
 resource "aws_iam_role" "lambda_execution_role" {
@@ -46,8 +59,7 @@ resource "aws_iam_role" "lambda_execution_role" {
       Principal = {
         Service = "lambda.amazonaws.com"
       }
-      }
-    ]
+    }]
   })
 }
 resource "aws_iam_role_policy_attachment" "lambda_policy" {
@@ -78,7 +90,7 @@ resource "aws_iam_policy" "lambda_dynamodb_policy" {
   })
 }
 
-# attaching the policy to the role:
+# # attaching the policy to the role:
 resource "aws_iam_role_policy_attachment" "lambda_dynamodb_policy" {
   role       = aws_iam_role.lambda_execution_role.name
   policy_arn = aws_iam_policy.lambda_dynamodb_policy.arn

@@ -18,3 +18,8 @@ moved {
   from = aws_api_gateway_integration_response.options_integration_response
   to   = module.method_render.aws_api_gateway_integration_response.method_path_options_integration_response
 }
+
+moved {
+  from = aws_api_gateway_resource.rest_api_resource
+  to   = aws_api_gateway_resource.slash-scripts
+}

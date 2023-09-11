@@ -5,7 +5,7 @@ import boto3
 
 # this is the generic GET handler for /scripts
 # we don't have a general collection of scripts so we just returna "not implemented" message
-def get__scripts(event, context):
+def slash_scripts(event, context):
     response_body = {
         "message": "not implemented",
         "request_id": context.aws_request_id,
@@ -20,6 +20,23 @@ def get__scripts(event, context):
 
     return {
         "statusCode": 501,
+        "headers": {
+            "Content-Type": "application/json",
+        },
+        "body": response_body_string,
+    }
+
+
+def slash_status(event, context):
+    response_body = {
+        "message": "status lookup not implemented",
+        "request_id": context.aws_request_id,
+        "status": "UNKNOWN",
+    }
+    response_body_string = json.dumps(response_body, default=str)
+
+    return {
+        "statusCode": 200,
         "headers": {
             "Content-Type": "application/json",
         },
@@ -57,4 +74,4 @@ def insert_or_update_status(request_id: str, status: str, event: str):
 
 
 if __name__ == "__main__":
-    print(get__scripts(None, None))
+    print("This is the lambda.py file, not intended to be run directly")

@@ -14,14 +14,6 @@ variable "api_gateway_account_id" {
   type        = string
   description = "The account ID in which to create/manage resources"
 } //value comes from main.tf
-variable "lambda_function_name" {
-  type        = string
-  description = "The name of the Lambda function"
-} //value comes from main.tf
-variable "lambda_function_arn" {
-  type        = string
-  description = "The ARN of the Lambda function"
-} //value comes from main.tf
 
 variable "rest_api_stage_name" {
   type        = string
@@ -32,4 +24,19 @@ variable "rest_api_stage_name" {
 variable "current_version" {
   type        = string
   description = "The current version of the API"
+}
+
+variable "lambda_function_base_name" {
+  type        = string
+  description = "The base name of the Lambda function"
+}
+
+variable "scripts_invoke_arn" {
+  type        = string
+  description = "The invoke URL for the scripts endpoint"
+}
+
+variable "status_invoke_arn" {
+  type        = string
+  description = "The invoke URL for the status endpoint"
 }
