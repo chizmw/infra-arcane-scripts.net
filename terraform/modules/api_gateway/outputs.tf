@@ -11,3 +11,9 @@ output "rest_api_id" {
 output "redeployment_triggers" {
   value = aws_api_gateway_deployment.rest_api_deployment.triggers["redeployment"]
 }
+
+
+# output the API Gateway endpoint
+output "api_gateway_endpoint" {
+  value = aws_api_gateway_rest_api.rest_api.execution_arn
+}

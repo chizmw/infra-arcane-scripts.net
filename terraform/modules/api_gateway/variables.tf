@@ -26,7 +26,7 @@ variable "lambda_function_arn" {
 variable "rest_api_stage_name" {
   type        = string
   description = "The name of the API Gateway stage"
-  default     = "prod" //add a stage name as per your requirement
+  default     = "alpha" //add a stage name as per your requirement
 }
 
 variable "current_version" {

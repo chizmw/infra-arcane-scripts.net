@@ -54,3 +54,32 @@ resource "aws_iam_role_policy_attachment" "lambda_policy" {
   role       = aws_iam_role.lambda_execution_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
+
+# a policy to allow dynamodb access:
+resource "aws_iam_policy" "lambda_dynamodb_policy" {
+  name        = "lambda_dynamodb_policy_${var.lambda_function_name}"
+  description = "A policy to allow lambda to access dynamodb"
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Action = [
+        "dynamodb:BatchGetItem",
+        "dynamodb:GetItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem",
+        "dynamodb:DeleteItem"
+      ]
+      Effect   = "Allow"
+      Resource = "*"
+    }]
+  })
+}
+
+# attaching the policy to the role:
+resource "aws_iam_role_policy_attachment" "lambda_dynamodb_policy" {
+  role       = aws_iam_role.lambda_execution_role.name
+  policy_arn = aws_iam_policy.lambda_dynamodb_policy.arn
+}
