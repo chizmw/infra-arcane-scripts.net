@@ -3,7 +3,7 @@ openapi: 3.0.0
 info:
   title: Arcane Scripts API
   description: API for requesting and retrieving rendered scripts
-  version: v0.0.2
+  version: v0.0.2.2
 paths:
   /scripts:
     post:
@@ -52,27 +52,11 @@ paths:
 servers:
   - description: API Gateway (alpha)
     url: https://tgmospc50f.execute-api.eu-west-2.amazonaws.com/alpha
-  - url: https://virtserver.swaggerhub.com/chizovation/CodingTips/0.0.1
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/chizovation/ArcaneScripts/v0.0.2.2
+
 components:
   schemas:
-    CodingTip:
-      type: object
-      description: A coding tip
-      properties:
-        tip:
-          type: string
-          description: The coding tip
-        date:
-          type: number
-          description: date in millis when tip was entered
-        author:
-          type: string
-          description: Author of the coding tip
-        category:
-          type: string
-          description: category of the coding tip
-      required:
-        - tip
     # types
     RequestId:
       type: string

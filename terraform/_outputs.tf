@@ -8,9 +8,9 @@ output "project_version" {
 }
 
 output "status_invoke_arn" {
-  value = module.api_gateway.status_invoke_arn
+  value = module.core_lambda_function.status_invoke_arn
 }
 
 output "scripts_invoke_arn" {
-  value = module.api_gateway.scripts_invoke_arn
+  value = module.core_lambda_function.scripts_invoke_arn
 }
