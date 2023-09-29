@@ -1,21 +1,19 @@
 resource "aws_api_gateway_rest_api" "json2pdf_api" {
   provider    = aws.default
-  name        = local.pdf_api_name
-  description = local.pdf_api_description
+  name        = local.old_pdf_api_name
+  description = local.old_pdf_api_description
 }
 
 resource "aws_api_gateway_resource" "json2pdf_resource" {
   provider    = aws.default
-  path_part   = local.pdf_render_path
+  path_part   = "render"
   parent_id   = aws_api_gateway_rest_api.json2pdf_api.root_resource_id
   rest_api_id = aws_api_gateway_rest_api.json2pdf_api.id
 }
 
 
 # OPTIONS method
-
-
-resource "aws_api_gateway_method" "options_method" {
+resource "aws_api_gateway_method" "root_options_method" {
   provider      = aws.default
   rest_api_id   = aws_api_gateway_rest_api.json2pdf_api.id
   resource_id   = aws_api_gateway_resource.json2pdf_resource.id
@@ -24,54 +22,6 @@ resource "aws_api_gateway_method" "options_method" {
 }
 
 
-resource "aws_api_gateway_method_response" "options_200" {
-  provider    = aws.default
-  rest_api_id = aws_api_gateway_rest_api.json2pdf_api.id
-  resource_id = aws_api_gateway_resource.json2pdf_resource.id
-  http_method = aws_api_gateway_method.options_method.http_method
-  status_code = 200
-  response_models = {
-    "application/json" = "Empty"
-  }
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = true,
-    "method.response.header.Access-Control-Allow-Methods" = true,
-    "method.response.header.Access-Control-Allow-Origin"  = true
-  }
-  depends_on = [aws_api_gateway_method.options_method]
-}
-
-
-resource "aws_api_gateway_integration" "options_integration" {
-  provider    = aws.default
-  rest_api_id = aws_api_gateway_rest_api.json2pdf_api.id
-  resource_id = aws_api_gateway_resource.json2pdf_resource.id
-  http_method = aws_api_gateway_method.options_method.http_method
-  type        = "MOCK"
-  depends_on  = [aws_api_gateway_method.options_method]
-  request_templates = {
-    "application/json" = jsonencode(
-      {
-        statusCode = 200
-      }
-    )
-  }
-}
-
-
-resource "aws_api_gateway_integration_response" "options_integration_response" {
-  provider    = aws.default
-  rest_api_id = aws_api_gateway_rest_api.json2pdf_api.id
-  resource_id = aws_api_gateway_resource.json2pdf_resource.id
-  http_method = aws_api_gateway_method.options_method.http_method
-  status_code = aws_api_gateway_method_response.options_200.status_code
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = "'X-Chisel-Info,access-control-allow-origin,cache-control,x-requested-with,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
-    "method.response.header.Access-Control-Allow-Methods" = "'OPTIONS,POST'",
-    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
-  }
-  depends_on = [aws_api_gateway_method_response.options_200]
-}
 
 # we need a gateway reaponse for default 4xx responses that add the following
 # header

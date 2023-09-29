@@ -11,14 +11,19 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 4.0"
+      version = "~> 5"
+    }
+
+    archive = {
+      source  = "hashicorp/archive"
+      version = "~> 2.3"
     }
   }
 }
 
 provider "aws" {
   alias  = "default"
-  region = "eu-west-2"
+  region = local.aws_default_region
   default_tags {
     tags = local.tag_defaults
   }

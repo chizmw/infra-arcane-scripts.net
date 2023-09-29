@@ -53,6 +53,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.CHIZOGRAPHY_GITHUB_AWS_SECRET_ACCESS_KEY }}
           aws-deployment-role: ${{ matrix.aws-deployment-role }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          aws-region: eu-west-2
           # yamllint enable rule:line-length
 
           # set auto-apply to true if we are running because of a tag creation
